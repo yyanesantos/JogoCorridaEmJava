@@ -1,5 +1,6 @@
 package jogo.Modelo;
 
+import jogo.Personagem;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
@@ -9,6 +10,7 @@ public class Player1 {
 	
 	private int x, y;
 	private int dx, dy;
+	private Personagem personagem;
 	private Image imagem;
 	private int altura, largura;
 	
@@ -71,6 +73,14 @@ public class Player1 {
 
 	public Image getImagem() {
 		return imagem;
+	}
+	
+	public void escolherPersonagem() {
+		int codigo = tecla.getKeyCode();
+		if(codigo == KeyEvent.VK_RIGHT) {
+			
+		}
+		
 	}
 	
 	

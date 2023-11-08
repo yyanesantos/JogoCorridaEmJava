@@ -3,7 +3,6 @@ package jogo;
 public class Veiculo {
 	
 	private float vida;
-	private String placa;
 	
 	public void setVida (float vida) {
 		this.vida = vida;
@@ -11,14 +10,6 @@ public class Veiculo {
 	
 	public float getVida () {
 		return this.vida;
-	}
-	
-	public void setPlaca (String placa) {
-		this.placa = placa;
-	}
-	
-	public String getPlaca () {
-		return this.placa;
 	}
 	
 	public void acelerar () {

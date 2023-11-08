@@ -1,9 +1,10 @@
 package jogo;
+import jogo.Modelo.MenuPrincipal;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 
-import Menu.MenuPrincipal;
+
 
 public class Jogo {
 	
