@@ -1,8 +1,5 @@
 
-package jogo.Modelo;
-import jogo.Modelo.Player1;
-// jogo.Modelo.Fase.TecladoAdapter;
-
+package jogo;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -12,13 +9,9 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -33,20 +26,41 @@ import javax.swing.event.MenuListener;
 
 public class MenuPrincipal extends JFrame{
 	
-	private Image vencedor;
-	private Image perdedor;
-	private Image podioImagem;
-	private Icon carro;
-	private Image deus;
-	private Timer timer;
+	//private Image vencedor;
+	//private Image perdedor;
+	//private Image podioImagem;
+	private String personagem1Player;
+	private String personagem2Player;
+	public boolean iniciouJogo;
+	
+	public String getPersonagem1Player() {
+		return personagem1Player;
+	}
+	
 	public MenuPrincipal () {
 		super("Deuses da Corrida!");
-		
+		iniciouJogo = false;
 		criarMenu();
 		criarLayoutInicial();
 	}
 	
-	private void criarLayoutInicial() {
+	
+	
+	public boolean isIniciouJogo() {
+		return iniciouJogo;
+	}
+	
+	public boolean testeSeOJogoFoiIniciado() {
+		if(iniciouJogo == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+	public void criarLayoutInicial() {
 		
 		setLayout(new BorderLayout());
 		
@@ -74,14 +88,13 @@ public class MenuPrincipal extends JFrame{
 				String iniciarJogo;
 				iniciarJogo = menuIniciarJogo();
 				if(iniciarJogo == "1-Player") {
-					menuEscolherPersonagem("1-Player", "Zeus");
+					menuEscolherPersonagem("1-Player");
 				} else if(iniciarJogo == "2-Player") {
-					menuEscolherPersonagem("2-Player", "Zeus");
+					menuEscolherPersonagem("2-Player");
 				} else {
+					iniciouJogo = false;
 					return;
 				}
-				//MenuEscolherPersonagem();
-				
 			}
 			
 			
@@ -94,7 +107,6 @@ public class MenuPrincipal extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menuComoJogar();
-				
 			}
 			
 		});
@@ -105,19 +117,17 @@ public class MenuPrincipal extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				podio("Hades", "Zeus");
-				
+				System.exit(0);
+				//podio("Hades", "Zeus");
 			}
 		
 		});
-		
 		
 		panelBotoes.add(botaoIniciarJogo);
 		panelBotoes.add(botaoComoJogar);
 		panelBotoes.add(botaoSair);
 		add(panelBotoes, BorderLayout.SOUTH);
-	
-		
+		System.out.println("a");
 	}
 	
 	public void menuComoJogar() {
@@ -139,11 +149,9 @@ public class MenuPrincipal extends JFrame{
 		
 	}
 
-	public void criarMenu() { //botões na parte de cima do menu (botar créditos)
+	public void criarMenu() {
 		
-		JMenu menuConheçaOsPersonagens = new JMenu ("Conheça os personagens!"); //instancia do objeto Menu
-		
-		
+		JMenu menuConheçaOsPersonagens = new JMenu ("Conheça os personagens!");
 		
 		JMenuItem menuZeus = new JMenuItem("Zeus");
 		
@@ -151,7 +159,6 @@ public class MenuPrincipal extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menuZeus();
-				
 			}
 		});
 		JMenuItem menuHades = new JMenuItem ("Hades");
@@ -160,8 +167,6 @@ public class MenuPrincipal extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menuHades();
-				JOptionPane.showMessageDialog(null, "Programa criado pelos alunos José Hilton e Yane dos Santos.", "Créditos", JOptionPane.PLAIN_MESSAGE);
-				
 			}
 			
 		});
@@ -172,7 +177,6 @@ public class MenuPrincipal extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				menuPoseidon();
-				
 			}
 			
 		});
@@ -190,32 +194,23 @@ public class MenuPrincipal extends JFrame{
 				JOptionPane.showMessageDialog(null, "Programa criado pelos alunos José Hilton e Yane dos Santos"
 						+ " do segundo semestre de Engenharia de "
 						+ "Computação no IFCE.", "Créditos", JOptionPane.PLAIN_MESSAGE);
-
-				
 			}
 
 			@Override
 			public void menuDeselected(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void menuCanceled(MenuEvent e) {
-				// TODO Auto-generated method stub
-				
+
 			}
-			
-			
 		});
 		
 		JMenuBar barraMenu = new JMenuBar();
 		setJMenuBar(barraMenu);
 		barraMenu.add(menuConheçaOsPersonagens);
 		barraMenu.add(menuCreditos);
-		
-		
-		
 	}
 	
 	public String menuIniciarJogo() {
@@ -230,8 +225,6 @@ public class MenuPrincipal extends JFrame{
 	    } else {
 	    	return "sair";
 	    }
-
-
 	}
 	
 	
@@ -248,6 +241,7 @@ public class MenuPrincipal extends JFrame{
 		JPanel poseidon = new JPanel(new BorderLayout());
 		menuPoseidon.add(poseidon, BorderLayout.CENTER);
 		JLabel poseidonImagem = new JLabel(animacaoDeuses("Poseidon", "feliz"));
+		poseidonImagem.setBorder(new EmptyBorder(5, 0, 0, 0));		
 		poseidon.add(poseidonImagem, BorderLayout.NORTH);
 		poseidon.setBackground(Color.blue);
 		poseidon.setFocusable(true);
@@ -257,6 +251,7 @@ public class MenuPrincipal extends JFrame{
 				+ "Era filho de Cronos e Reia e foi resgatado do ventre de seu pai pelo seu irmão Zeus."
 				+ "Acredita-se que o culto a Poseidon seja advindo do período micênico.</html>");
 		poseidonInfo.setFont(new Font("Arial", Font.BOLD, 14));
+		poseidonInfo.setBorder(new EmptyBorder(0,5,0,0));
 		poseidonInfo.setForeground(Color.green);
 		poseidon.add(poseidonInfo, BorderLayout.CENTER);
 		JLabel poseidonPoder = new JLabel(new ImageIcon ("res\\PoderPoseidon.png"));
@@ -276,6 +271,7 @@ public class MenuPrincipal extends JFrame{
 		JPanel hades = new JPanel(new BorderLayout());
 		menuHades.add(hades, BorderLayout.CENTER);
 		JLabel hadesImagem = new JLabel(animacaoDeuses("Hades", "feliz"));
+		hadesImagem.setBorder(new EmptyBorder(5,0,0,0));
 		hades.add(hadesImagem, BorderLayout.NORTH);
 		hades.setBackground(Color.black);
 		hades.setFocusable(true);
@@ -285,6 +281,7 @@ public class MenuPrincipal extends JFrame{
 				+ " Era irmão de Zeus e casado com Perséfone."
 				+ " Hades era o deus do submundo e contava com a ajuda de seu cão de três cabeças, Cérbero, "
 				+ "para impedir que as almas fugissem de lá.</html>");
+		hadesInfo.setBorder(new EmptyBorder(0,5,0,0));
 		hadesInfo.setFont(new Font("Arial", Font.BOLD, 14));
 		hadesInfo.setForeground(Color.red);
 		hades.add(hadesInfo, BorderLayout.CENTER);
@@ -307,6 +304,7 @@ public class MenuPrincipal extends JFrame{
 		JPanel zeus = new JPanel(new BorderLayout());
 		menuZeus.add(zeus, BorderLayout.CENTER);
 		JLabel zeusImagem = new JLabel(animacaoDeuses("Zeus", "feliz"));
+		zeusImagem.setBorder(new EmptyBorder(5,0,0,0));
 		zeus.add(zeusImagem, BorderLayout.NORTH);
 		zeus.setFocusable(true);
 		zeus.setDoubleBuffered(true);
@@ -315,163 +313,197 @@ public class MenuPrincipal extends JFrame{
 				+ "Era conhecido como deus dos céus, do raio e do trovão e era filho de Cronos e Reia."
 				+ "Foi salvo pela mãe de ser devorado pelo próprio pai e,"
 				+ "depois de adulto, resgatou seus irmãos e vingou-se de seu genitor.</html>");
+		zeusInfo.setBorder(new EmptyBorder(0,5,0,0));
 		zeusInfo.setFont(new Font("Arial", Font.BOLD, 14));
 		zeusInfo.setForeground(Color.blue);
 		zeus.add(zeusInfo, BorderLayout.CENTER);
 		JLabel zeusPoder = new JLabel (new ImageIcon("res\\PoderZeus.png"));
 		zeus.add(zeusPoder, BorderLayout.SOUTH);
-				
-				
-		/*menuZeus.addWindowListener(new WindowAdapter() {
-			
-			public void windowClosing(WindowEvent event) {
-				
-			}
-			
-			
-		});*/// tentativa de animação do personagem, por enquanto falho
-		
-
     };
     
-    public void menuEscolherPersonagem(String modoDeJogo, String deusMenu) {
-    	
-    	boolean escolheuPersonagem = false;
+    public void menuEscolherPersonagem(String modoDeJogo) {
     	
     	Icon carroZeus = new ImageIcon("res\\CarroZeus.png");
-    	Icon carroPoseidon = new ImageIcon("res\\CarroPoseidon");
-    	Icon carroHades = new ImageIcon("res\\CarroHades");
+    	Icon carroPoseidon = new ImageIcon("res\\CarroPoseidon.png");
+    	Icon carroHades = new ImageIcon("res\\CarroHades.png");
     	
-    	this.carro =  carroZeus;
-	    this.deus = animacaoDeuses("Zeus", "feliz").getImage();
-    	
-    	/*if(deusMenu == "Zeus") {
-		    this.carro = new ImageIcon("res\\CarroZeus.png").getImage();
-		    this.deus = animacaoDeuses("Zeus", "feliz").getImage();
-    	} else if (deusMenu == "Hades") {
-    		this.carro = new ImageIcon("res\\CarroHades.png").getImage();
-    		this.deus = animacaoDeuses("Hades", "feliz").getImage();
-    	} else if (deusMenu == "Poseidon"){
-    		this.carro = new ImageIcon("res\\CarroPoseidon.png").getImage();
-    		this.deus = animacaoDeuses("Poseidon", "feliz").getImage();
-    	}*/
     	
     	JFrame menuEscolherPersonagem = new JFrame("Selecione o personagem para o Player 1!");
     	menuEscolherPersonagem.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);			
     	menuEscolherPersonagem.setLayout(new BorderLayout());
-    	menuEscolherPersonagem.setSize(800,400);
+    	menuEscolherPersonagem.setSize(1000,400);
     	menuEscolherPersonagem.setVisible(true);
     	menuEscolherPersonagem.setLocationRelativeTo(null);
     	menuEscolherPersonagem.setResizable(true);		
     	menuEscolherPersonagem.toFront();
     	
-    	JPanel deusPainel = new JPanel(new BorderLayout(50, 0));
-    		JLabel info = new JLabel("Player 1! Selecione seu carro:");
-    		info.setFont(new Font("Arial", Font.BOLD, 25));
-    		deusPainel.add(info, BorderLayout.NORTH);
-    		menuEscolherPersonagem.add(deusPainel, BorderLayout.CENTER);
-    		menuEscolherPersonagem.setBackground(Color.white);
-    		JLabel imagemCarro = new JLabel();
-    		deusPainel.setBorder(new EmptyBorder(0, 200, 150, 0));
-    		deusPainel.add(imagemCarro, BorderLayout.LINE_START);
-    		JLabel imagemPersonagem = new JLabel();
-    		deusPainel.add(imagemPersonagem, BorderLayout.CENTER);
-    		imagemPersonagem.setIcon(animacaoDeuses("Zeus", "feliz"));
-            imagemCarro.setIcon((Icon) this.carro);
-    		
-    		menuEscolherPersonagem.addKeyListener(new TecladoAdapter(modoDeJogo, deusMenu));
-    		do {
-    			menuEscolherPersonagem.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);	
-    		}while(escolheuPersonagem == true);
-    		
-    }
-    
-    private class TecladoAdapter extends KeyAdapter {
-		
-    	private String modoDeJogo;
-    	private String deusAtual;
-    	public TecladoAdapter(String modoDeJogo, String deusAtual) {
-    		
-    	}
     	
-		@Override
-		public void keyPressed(KeyEvent e) {
-			MenuPrincipal.this.keyPressed(e, modoDeJogo, deusAtual);
-		}
-		
-		@Override
-		public void keyReleased(KeyEvent e) {
-			MenuPrincipal.this.keyReleased(e, modoDeJogo, deusAtual);
-		}
-	}
-    
-    public void keyPressed (KeyEvent tecla, String modoDeJogo, String deusAtual) {
-		int codigo = tecla.getKeyCode();
-		if(codigo == KeyEvent.VK_LEFT) {
-			if(deusAtual == "Zeus") {
-				this.carro = new ImageIcon("res\\CarroPoseidon.png").getImage();
-	    		this.deus = animacaoDeuses("Poseidon", "feliz").getImage();
-			} else if (deusAtual == "Hades") {
-				this.carro = new ImageIcon("res\\CarroZeus.png").getImage();
-			    this.deus = animacaoDeuses("Zeus", "feliz").getImage();
-			} else {
-				this.carro = new ImageIcon("res\\CarroHades.png").getImage();
-	    		this.deus = animacaoDeuses("Hades", "feliz").getImage();
-			}
-		}
-		if(codigo == KeyEvent.VK_RIGHT) {
-			if(deusAtual == "Zeus") {
-				this.carro = new ImageIcon("res\\CarroHades.png").getImage();
-	    		this.deus = animacaoDeuses("Hades", "feliz").getImage();
-			} else if (deusAtual == "Hades") {
-				this.carro = new ImageIcon("res\\CarroPoseidon.png").getImage();
-	    		this.deus = animacaoDeuses("Poseidon", "feliz").getImage();
-			} else {
-				this.carro = new ImageIcon("res\\CarroZeus.png").getImage();
-			    this.deus = animacaoDeuses("Zeus", "feliz").getImage();
-			}
-		}
-	}
-	
-	public boolean keyReleased (KeyEvent tecla, String modoDeJogo, String deusAtual) {
-		int codigo = tecla.getKeyCode();
-		if(codigo == KeyEvent.VK_LEFT) {
-			if(deusAtual == "Zeus") {
-				//menuEscolherPersonagem(modoDeJogo, "Zeus");
-				return false;
-			} else if (deusAtual == "Hades") {
-				//menuEscolherPersonagem(modoDeJogo, "Hades");
-				return true;
-			} else {
-				//menuEscolherPersonagem(modoDeJogo, "Poseidon");
-				return false;
-			}
-		}
-		if(codigo == KeyEvent.VK_RIGHT) {
-			if(deusAtual == "Zeus") {
-				//menuEscolherPersonagem(modoDeJogo, "Zeus");
-				return false;
-			} else if (deusAtual == "Hades") {
-				//menuEscolherPersonagem(modoDeJogo, "Hades");
-				return false;
-			} else {
-				//menuEscolherPersonagem(modoDeJogo, "Poseidon");
-				return false;
-			}
-		}
-		
-		return true;
-	}
-	
-	public class paint extends JComponent {
-	    public void paintComponent(Graphics g){
-	    super.paintComponents(g);
-		//Graphics2D graficos = (Graphics2D)g;
-		g.drawImage(carro, 300, 100, this);
-		g.drawImage(deus, 500 , 100, this); 
-		g.dispose();
-	    }
+    	
+    	JPanel titulo = new JPanel();
+    		JLabel info = new JLabel("<html>Player 1! <br>"
+    				+ "Selecione seu carro: <br>"
+    				+ "(Zeus, Poseidon, Hades, em ordem)</html>");
+    		info.setBorder(new EmptyBorder(25, 0, 0, 0));
+    		info.setFont(new Font("Arial", Font.BOLD, 25));
+    		titulo.setBackground(Color.WHITE);
+    		titulo.add(info, BorderLayout.NORTH);
+    		menuEscolherPersonagem.add(titulo, BorderLayout.NORTH);
+    		menuEscolherPersonagem.setBackground(Color.white);
+    	JPanel zeusPainel = new JPanel(new FlowLayout());
+    		JLabel imagemCarroZeus = new JLabel();
+    		zeusPainel.setBorder(new EmptyBorder(25, 0, 0, 0));
+    		zeusPainel.add(imagemCarroZeus, FlowLayout.LEFT);
+    		zeusPainel.setBackground(Color.WHITE);
+    		JLabel imagemPersonagemZeus = new JLabel();
+    		zeusPainel.add(imagemPersonagemZeus, BorderLayout.CENTER);
+    		imagemPersonagemZeus.setIcon(animacaoDeuses("Zeus", "feliz"));
+            imagemCarroZeus.setIcon((Icon) carroZeus);
+            menuEscolherPersonagem.add(zeusPainel, BorderLayout.LINE_START);
+        JPanel poseidonPainel = new JPanel(new FlowLayout());
+    		JLabel imagemCarroPoseidon = new JLabel();
+    		poseidonPainel.setBorder(new EmptyBorder(25, 0, 0, 0));
+    		poseidonPainel.add(imagemCarroPoseidon, FlowLayout.LEFT);
+    		poseidonPainel.setBackground(Color.WHITE);
+    		JLabel imagemPersonagemPoseidon = new JLabel();
+    		poseidonPainel.add(imagemPersonagemPoseidon, BorderLayout.CENTER);
+    		imagemPersonagemPoseidon.setIcon(animacaoDeuses("Poseidon", "feliz"));
+    		imagemCarroPoseidon.setIcon((Icon)carroPoseidon);
+            menuEscolherPersonagem.add(poseidonPainel, BorderLayout.CENTER);
+        JPanel hadesPainel = new JPanel(new FlowLayout());
+    		JLabel imagemCarroHades = new JLabel();
+    		hadesPainel.setBorder(new EmptyBorder(25, 0, 0, 0));
+    		hadesPainel.add(imagemCarroHades, FlowLayout.LEFT);
+    		hadesPainel.setBackground(Color.WHITE);
+    		JLabel imagemPersonagemHades = new JLabel();
+    		hadesPainel.add(imagemPersonagemHades, BorderLayout.CENTER);
+    		imagemPersonagemHades.setIcon(animacaoDeuses("Hades", "feliz"));
+    		imagemCarroHades.setIcon((Icon) carroHades);
+            menuEscolherPersonagem.add(hadesPainel, BorderLayout.LINE_END);
+
+        JPanel botaoEscolha = new JPanel(new FlowLayout());
+            JButton escolhaZeus = new JButton("Zeus");
+            escolhaZeus.setFont(new Font("Arial", Font.BOLD, 12));
+            escolhaZeus.setForeground(Color.DARK_GRAY);
+            escolhaZeus.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Object[] options = { "Confirmar", "Cancelar" };
+					if(personagem1Player == null && personagem2Player == null) {
+					    int opcaoSelecionada = JOptionPane.showOptionDialog(null, "<html>Zeus foi selecionado, Player 1!<br>Confirmar?", "Informação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+					    if(opcaoSelecionada == 0 && modoDeJogo == "1-Player" && personagem1Player == null) {
+						    personagem1Player = "Zeus";
+						    iniciouJogo = true;
+						    menuEscolherPersonagem.dispose();
+					    } else if (opcaoSelecionada == 0 && modoDeJogo == "2-Player") {
+						    personagem1Player = "Zeus";
+						    personagem2Player = null;
+						    menuEscolherPersonagem("1-Player");
+						    menuEscolherPersonagem.dispose();
+					    }
+					} else {
+						int opcaoSelecionada = JOptionPane.showOptionDialog(null, "<html>Zeus foi selecionado, Player 2!<br>Confirmar?", "Informação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+					    if(opcaoSelecionada == 0 && modoDeJogo == "1-Player" && personagem1Player != null) {
+						    personagem2Player = "Zeus";
+						    iniciouJogo = true;
+						    menuEscolherPersonagem.dispose();
+					    }
+					}
+				}});
+            botaoEscolha.add(escolhaZeus);
+            JButton escolhaPoseidon = new JButton("Poseidon");
+            escolhaPoseidon.setFont(new Font("Arial", Font.BOLD, 12));
+            escolhaPoseidon.setForeground(Color.BLUE);
+            escolhaPoseidon.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Object[] options = { "Confirmar", "Cancelar" };
+					if(personagem1Player == null && personagem2Player == null) {
+					    int opcaoSelecionada = JOptionPane.showOptionDialog(null, "<html>Poseidon foi selecionado, Player 1!<br>Confirmar?", "Informação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+					    if(opcaoSelecionada == 0 && modoDeJogo == "1-Player" && personagem1Player == null) {
+						    personagem1Player = "Poseidon";
+						    iniciouJogo = true;
+						    menuEscolherPersonagem.dispose();
+					    } else if (opcaoSelecionada == 0 && modoDeJogo == "2-Player") {
+						    personagem1Player = "Poseidon";
+						    personagem2Player = null;
+						    menuEscolherPersonagem("1-Player");
+						    menuEscolherPersonagem.dispose();
+					    }
+					} else {
+						int opcaoSelecionada = JOptionPane.showOptionDialog(null, "<html>Poseidon foi selecionado, Player 2!<br>Confirmar?", "Informação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+					    if(opcaoSelecionada == 0 && modoDeJogo == "1-Player" && personagem1Player != null) {
+						    personagem2Player = "Poseidon";
+						    iniciouJogo = true;
+						    menuEscolherPersonagem.dispose();
+					    }
+					}
+				}
+            });
+            botaoEscolha.add(escolhaPoseidon);
+            JButton escolhaHades = new JButton("Hades");
+            escolhaHades.setFont(new Font("Arial", Font.BOLD, 12));
+            escolhaHades.setForeground(Color.RED);
+            escolhaHades.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Object[] options = { "Confirmar", "Cancelar" };
+					if(personagem1Player == null && personagem2Player == null) {
+					    int opcaoSelecionada = JOptionPane.showOptionDialog(null, "<html>Hades foi selecionado, Player 1!<br>Confirmar?", "Informação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+					    if(opcaoSelecionada == 0 && modoDeJogo == "1-Player" && personagem1Player == null) {
+						    personagem1Player = "Hades";
+						    iniciouJogo = true;
+						    menuEscolherPersonagem.dispose();
+					    } else if (opcaoSelecionada == 0 && modoDeJogo == "2-Player") {
+						    personagem1Player = "Hades";
+						    personagem2Player = null;
+						    menuEscolherPersonagem("1-Player");
+						    menuEscolherPersonagem.dispose();
+					    }
+					} else {
+						int opcaoSelecionada = JOptionPane.showOptionDialog(null, "<html>Hades foi selecionado, Player 2!<br>Confirmar?", "Informação", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+					    if(opcaoSelecionada == 0 && modoDeJogo == "1-Player" && personagem1Player != null) {
+						    personagem2Player = "Hades";
+						    iniciouJogo = true;
+						    menuEscolherPersonagem.dispose();
+					    }
+					}
+				}});
+            botaoEscolha.add(escolhaHades);
+            botaoEscolha.setBackground(Color.WHITE);
+            menuEscolherPersonagem.add(botaoEscolha, BorderLayout.SOUTH);
+            
+            if(personagem1Player == "Zeus" && modoDeJogo == "1-Player" && personagem2Player == null) {
+            	info.setText("<html>Player 2! <br>"
+    				+ "Selecione seu carro: <br>"
+    				+ "(Poseidon, Hades, em ordem)</html>");
+        		imagemCarroZeus.setVisible(false);
+        		imagemPersonagemZeus.setVisible(false);
+        		escolhaZeus.setVisible(false);
+        	} else if (personagem1Player == "Poseidon" && modoDeJogo == "1-Player" && personagem2Player == null) {
+        		info.setText("<html>Player 2! <br>"
+        				+ "Selecione seu carro: <br>"
+        				+ "(Zeus, Hades, em ordem)</html>");
+        		imagemCarroPoseidon.setVisible(false);
+        		imagemPersonagemPoseidon.setVisible(false);
+        		escolhaPoseidon.setVisible(false);
+        	} else if(personagem1Player == "Hades" && modoDeJogo == "1-Player" && personagem2Player == null) {
+        		info.setText("<html>Player 2! <br>"
+        				+ "Selecione seu carro: <br>"
+        				+ "(Zeus, Poseidon, em ordem)</html>");
+        		imagemCarroHades.setVisible(false);
+        		imagemPersonagemHades.setVisible(false);
+        		escolhaHades.setVisible(false);
+        	}
+            
+            
+            
+    		
+    		
     }
+    
 	
 	public ImageIcon animacaoDeuses (String deus, String mood) {
 		
@@ -506,7 +538,7 @@ public class MenuPrincipal extends JFrame{
 		
 	}
 	
-	public void podio (String primeiroLugar, String segundoLugar) {
+	/*public void podio (String primeiroLugar, String segundoLugar) {
 		
 		JFrame podio = new JFrame ("Pódio!");
 		podio.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);			
@@ -533,22 +565,5 @@ public class MenuPrincipal extends JFrame{
 		};
 		podio.add(podioCorrida);
 		podioCorrida.setBackground(Color.white);
-	}
+	}*/
 }		
-
-
-/*public MenuPrincipal () {
-		add(new Fase());
-		setTitle("Meu jogo!");
-		setSize(1440, 1200);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		this.setResizable(true);
-		setVisible(true);
-	}*/
-	
-	/*public static void main (String[] args) {
-		new MenuPrincipal();
-	}*/
-
-

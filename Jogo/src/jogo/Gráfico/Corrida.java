@@ -1,4 +1,4 @@
-package jogo;
+package jogo.Gráfico;
 
 public class Corrida {
 	
