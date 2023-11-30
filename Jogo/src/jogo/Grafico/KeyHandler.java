@@ -4,10 +4,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener{
-	public boolean upPressed, downPressed, leftPressed, rightPressed, spacePressed;
+	public boolean up1Pressed, up2Pressed, down1Pressed, down2Pressed, left1Pressed, left2Pressed, right1Pressed, right2Pressed, space1Pressed, enter2Pressed;
+	public String player;
 	
-	public KeyHandler() {
+	public KeyHandler(String player) {
+		this.player = player;
 	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
@@ -15,40 +18,83 @@ public class KeyHandler implements KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int code = e.getKeyCode();
+		if(player == "Player 1") {
 		if (code == KeyEvent.VK_W) {
-			upPressed = true;
+			up1Pressed = true;
 		}
 		if (code == KeyEvent.VK_S) {
-			downPressed = true;
+			down1Pressed = true;
 		}
 		if (code == KeyEvent.VK_A) {
-			leftPressed = true;
+			left1Pressed = true;
 		}
 		if (code == KeyEvent.VK_D) {
-			rightPressed = true;
+			right1Pressed = true;
 		}
 		if(code == KeyEvent.VK_SPACE) {
-			spacePressed = true;
+			space1Pressed = true;
+		}} else {
+		
+		if(code == KeyEvent.VK_UP) {
+			up1Pressed = true;
+		}
+		
+		if (code == KeyEvent.VK_DOWN) {
+			down1Pressed = true;
+		}
+		
+		if (code == KeyEvent.VK_LEFT) {
+			left1Pressed = true;
+		}
+		
+		if (code == KeyEvent.VK_RIGHT) {
+			right1Pressed = true;
+		}
+		
+		if(code == KeyEvent.VK_ENTER) {
+			space1Pressed = true;
+		}
 		}
 }
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int code = e.getKeyCode();
+		if(player == "Player 1") {
 		if (code == KeyEvent.VK_W) {
-			upPressed = false;
+			up1Pressed = false;
 		}
 		if (code == KeyEvent.VK_S) {
-			downPressed = false;
+			down1Pressed = false;
 		}
 		if (code == KeyEvent.VK_A) {
-			leftPressed = false;
+			left1Pressed = false;
 		}
 		if (code == KeyEvent.VK_D) {
-			rightPressed = false;
+			right1Pressed = false;
 		}
 		if(code == KeyEvent.VK_SPACE) {
-			spacePressed = false;
+			space1Pressed = true;
+		}} else {
+		if(code == KeyEvent.VK_UP) {
+			up1Pressed = false;
+		}
+		
+		if (code == KeyEvent.VK_DOWN) {
+			down1Pressed = false;
+		}
+		
+		if (code == KeyEvent.VK_LEFT) {
+			left1Pressed = false;
+		}
+		
+		if (code == KeyEvent.VK_RIGHT) {
+			right1Pressed = false;
+		}
+		
+		if(code == KeyEvent.VK_ENTER) {
+			space1Pressed = true;
+		}
 		}
 	}
 }

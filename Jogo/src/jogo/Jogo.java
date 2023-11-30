@@ -40,7 +40,7 @@ public class Jogo{
 		telaDaCorrida.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 		telaDaCorrida.setResizable(false);
 		telaDaCorrida.setLocationRelativeTo(null);
-		Corrida novaCorrida = new Corrida("Zeus");
+		Corrida novaCorrida = new Corrida("Zeus", "Poseidon");
 		telaDaCorrida.add(novaCorrida);
 		telaDaCorrida.pack();
 		telaDaCorrida.setVisible(true);

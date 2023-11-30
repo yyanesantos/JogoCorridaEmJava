@@ -2,6 +2,7 @@ package jogo.Grafico;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
@@ -12,10 +13,11 @@ public class Poder {
 	private int largura, altura;
 	private boolean isVisivel;
 	private String nomePersonagem;
+	private ArrayList<Long> tempos;
 	
 	private static final int LARGURA = 1440;
 	private static final int LARGURAINICIAL = 0;
-	private static int VELOCIDADE = 5;
+	private static int VELOCIDADE = 2;
 	
 	public Poder(int x, int y) {
 		
@@ -43,11 +45,11 @@ public class Poder {
 	}
 	
 	public void update(String tipo) {
-		if(tipo == "Pra frente") {
-		    this.x += VELOCIDADE;
-		} else if(tipo == "Pra tras") {
+	    if(tipo == "Pra frente") {
+				this.x += VELOCIDADE;
+		    }else if(tipo == "Pra tras") {
 			this.x -= VELOCIDADE;
-		}
+		    }
 		if(this.x > LARGURA || this.x < LARGURAINICIAL) {
 			isVisivel = false;
 		}

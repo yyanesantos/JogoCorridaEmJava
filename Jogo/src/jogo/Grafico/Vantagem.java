@@ -10,6 +10,7 @@ public class Vantagem {
 	private Image imagemVantagem;
 	private int x, y;
 	private int largura, altura;
+	private String tipoVantagem;
 	private boolean isVisivel;
 	private boolean bateu;
 	
@@ -41,9 +42,15 @@ public class Vantagem {
     public Rectangle getBounds() {
     	return new Rectangle(x, y, largura, altura);
     }
+    
+	public String getTipoVantagem() {
+		return tipoVantagem;
+	}
 
-    
-    
+	public void setTipoVantagem(String tipoVantagem) {
+		this.tipoVantagem = tipoVantagem;
+	}
+
 	public boolean isBateu() {
 		return bateu;
 	}

@@ -25,8 +25,8 @@ public class Buraco {
 		ImageIcon referencia = new ImageIcon("res\\Buraco.png");
 		this.imagemBuraco = referencia.getImage();
 		
-		this.altura = 48;
-		this.largura = 48;
+		this.altura = imagemBuraco.getHeight(null);
+		this.largura = imagemBuraco.getWidth(null);
 		
 		
 	}
@@ -58,6 +58,16 @@ public class Buraco {
 
 	public void setVisivel(boolean isVisivel) {
 		this.isVisivel = isVisivel;
+	}
+	
+	
+
+	public int getLargura() {
+		return largura;
+	}
+
+	public int getAltura() {
+		return altura;
 	}
 
 	public int getX() {
