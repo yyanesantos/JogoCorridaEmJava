@@ -40,8 +40,7 @@ public class Player extends Veiculo implements ActionListener{
 	
 	
 	public Player (String personagemSelecionado, Corrida corrida, KeyHandler keyH) {
-		ImageIcon explosao = new ImageIcon("res\\Explosao.png");
-		imagemExplosao = explosao.getImage();
+		imagemExplosao = carregadorImagens.getImagem("Explosao");
 		
 		isVisivel = true;
 		
@@ -49,9 +48,9 @@ public class Player extends Veiculo implements ActionListener{
 		this.keyH = keyH;
 		this.deus = personagemSelecionado;	
 		monitor = new MonitorTempo(keyH);
-		setStatusVida("3 Vidas");
-		setStatusPoder("OFF");
-		setStatusNitro("OFF");
+		setStatusVida("3Vidas");
+		setStatusPoder("PoderOFF");
+		setStatusNitro("NitroOFF");
 		
 		timerExplosao = new Timer(150, this);
 		timerAnimacao = new Timer(150, this);
@@ -80,20 +79,16 @@ public class Player extends Veiculo implements ActionListener{
 		largura = corrida.tileSize - 8;
     	
     	if(this.deus == "Zeus") {
-		    ImageIcon referencia = new ImageIcon("res\\CarroZeus.png");
-			imagem = referencia.getImage();
+			imagem = carregadorImagens.getImagem("CarroZeus");
 		} else if(this.deus == "Poseidon") {
-			ImageIcon referencia = new ImageIcon("res\\CarroPoseidon.png");
-			imagem = referencia.getImage();
+			imagem = carregadorImagens.getImagem("CarroPoseidon");
 		} else {
-			ImageIcon referencia = new ImageIcon("res\\CarroHades.png");
-			imagem = referencia.getImage();
+			imagem = carregadorImagens.getImagem("CarroHades");
 		}
 	}
 	
 	public void update (ArrayList<Vantagem> vantagens) {
 		x += speed;
-
 		this.frear();
 		this.desacelerar();
 		this.velocidade();
@@ -123,23 +118,20 @@ public class Player extends Veiculo implements ActionListener{
 	    	   keyH.space1Pressed = false;
 	    	   isNitro = false;
 	    	   load();
-	    	   setStatusNitro("OFF");
+	    	   setStatusNitro("NitroOFF");
 	    	   monitor.setContagemFinalizada(false);
 	       }
 	    
 	}
 	
 	public void nitro() {
-		speed += 0.15;
+		speed += 0.2;
 		if(this.deus == "Zeus") {
-		    ImageIcon referencia = new ImageIcon("res\\CarroZeusNitro.png");
-			imagem = referencia.getImage();
+			imagem = carregadorImagens.getImagem("CarroZeusNitro");
 		} else if(this.deus == "Poseidon") {
-			ImageIcon referencia = new ImageIcon("res\\CarroPoseidonNitro.png");
-			imagem = referencia.getImage();
+			imagem = carregadorImagens.getImagem("CarroPoseidonNitro");
 		} else {
-			ImageIcon referencia = new ImageIcon("res\\CarroHadesNitro.png");
-			imagem = referencia.getImage();
+			imagem = carregadorImagens.getImagem("CarroHadesNitro");
 		}
 	}
 	
@@ -178,16 +170,23 @@ public class Player extends Veiculo implements ActionListener{
 		}
 	}
 	
-	public void derrapar() {
-		for(int a = 0; a < 4 ; a ++) {
-			setY(this.y + 5 + a*5);
+	public void derrapar(String modo) {
+		if(modo == "Pra baixo") {
+		    for(int a = 0; a < 3 ; a ++) {
+			    setY(this.y + 5 + a*5);
+		    }
+		} else if(modo == "Pra cima") {
+			for(int a = 0; a < 3; a ++) {
+				setY(this.y - 5 - a*5);
+			}
 		}
 	}
 	
 	
-	public void draw(Graphics2D g2) {
+	public void draw(Graphics2D g2, int desvioDeNivel) {
 		if(this.isVisivel() == true) {
-	    g2.drawImage(imagem, x, y, largura, altura, null);
+	    g2.drawImage(imagem, x - desvioDeNivel, y, largura, altura, null);
+	    //g2.drawImage(image, (int)X1 - desvioDeNivel, (int)Y1, Painel.tileSize, Painel.tileSize, null);
 		}
 	    g2.drawImage(getImagemStatusVida(), xVida, 260, null); 
 	    g2.drawImage(getImagemStatusNitro(), xNitro, 286, null); 
@@ -242,7 +241,7 @@ public class Player extends Veiculo implements ActionListener{
 		return this.y;
 	}
 
-	public Image getImagem() {
+	public BufferedImage getImagem() {
 		return this.imagem;
 	}
 	
@@ -250,7 +249,7 @@ public class Player extends Veiculo implements ActionListener{
 		return monitor;
 	}
 
-	public void setImagem(Image imagem) {
+	public void setImagem(BufferedImage imagem) {
 		this.imagem = imagem;
 	}
 

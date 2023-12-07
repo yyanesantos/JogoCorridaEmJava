@@ -2,12 +2,14 @@ package jogo.Grafico;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 
 public class Vantagem {
 	
-	private Image imagemVantagem;
+	private BufferedImage imagemVantagem;
+	private CarregadorImagens carregadorImagens;
 	private int x, y;
 	private int largura, altura;
 	private String tipoVantagem;
@@ -19,12 +21,12 @@ public class Vantagem {
 		this.x = x;
 		this.y = y;
 		this.isVisivel = true;
+		carregadorImagens = new CarregadorImagens();
 	}
     
     public void load() {
 		
-		ImageIcon referencia = new ImageIcon("res\\Vantagem.png");
-		this.imagemVantagem = referencia.getImage();
+		this.imagemVantagem = carregadorImagens.getImagem("Vantagem");
 		
 		this.altura = 33;
 		this.largura = 33;
@@ -75,7 +77,7 @@ public class Vantagem {
 		return y;
 	}
 
-	public Image getImagemVantagem() {
+	public BufferedImage getImagemVantagem() {
 		return imagemVantagem;
 	}
 	

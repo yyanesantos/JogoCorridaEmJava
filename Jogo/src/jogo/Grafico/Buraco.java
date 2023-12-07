@@ -2,15 +2,17 @@ package jogo.Grafico;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 
 public class Buraco {
-	private Image imagemBuraco;
+	private BufferedImage imagemBuraco;
 	private int x, y;
 	private int largura, altura;
 	private boolean isVisivel;
 	private boolean bateu;
+	private CarregadorImagens carregadorImagens;
 	
     public Buraco(int x, int y) {
 		
@@ -18,12 +20,13 @@ public class Buraco {
 		this.y = y;
 		this.isVisivel = true;
 		bateu = false;
+		carregadorImagens = new CarregadorImagens();
+		
 	}
     
     public void load() {
 		
-		ImageIcon referencia = new ImageIcon("res\\Buraco.png");
-		this.imagemBuraco = referencia.getImage();
+		this.imagemBuraco = carregadorImagens.getImagem("Buraco");
 		
 		this.altura = imagemBuraco.getHeight(null);
 		this.largura = imagemBuraco.getWidth(null);
@@ -78,7 +81,7 @@ public class Buraco {
 		return y;
 	}
 
-	public Image getImagemBuraco() {
+	public BufferedImage getImagemBuraco() {
 		return imagemBuraco;
 	}
 	

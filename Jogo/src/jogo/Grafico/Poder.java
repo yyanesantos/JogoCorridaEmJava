@@ -2,18 +2,20 @@ package jogo.Grafico;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageFilter;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 
 public class Poder {
 	
-	private Image imagemPoder;
+	private BufferedImage imagemPoder;
 	private int x, y;
 	private int largura, altura;
 	private boolean isVisivel;
 	private String nomePersonagem;
-	private ArrayList<Long> tempos;
+	private CarregadorImagens carregadorImagens;
 	
 	private static final int LARGURA = 1440;
 	private static final int LARGURAINICIAL = 0;
@@ -29,14 +31,11 @@ public class Poder {
 	public void load() {
 		
 		if(this.nomePersonagem == "Zeus") {
-			ImageIcon referencia = new ImageIcon("res\\PoderZeus.png");
-			this.imagemPoder = referencia.getImage();
+			imagemPoder = carregadorImagens.getImagem("PoderZeus");
 		} else if (this.nomePersonagem == "Hades") {
-			ImageIcon referencia = new ImageIcon("res\\PoderHades.png");
-			this.imagemPoder = referencia.getImage();
+			imagemPoder = carregadorImagens.getImagem("PoderHades");
 		} else {
-			ImageIcon referencia = new ImageIcon("res\\PoderPoseidon.png");
-			this.imagemPoder = referencia.getImage();
+			imagemPoder = carregadorImagens.getImagem("PoderPoseidon");
 		}
 		
 		

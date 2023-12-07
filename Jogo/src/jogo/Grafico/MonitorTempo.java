@@ -20,7 +20,7 @@ public class MonitorTempo implements ActionListener{
 		  private String modo;
 		  
 		  public MonitorTempo(KeyHandler keyH) {
-			  timerNitro = new Timer(3000, this);
+			  timerNitro = new Timer(2000, this);
 			  timerPoder = new Timer(500, this);
 			  timerInvencibilidade = new Timer(1500, this);
 			  

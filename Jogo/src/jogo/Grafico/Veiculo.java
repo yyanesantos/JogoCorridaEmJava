@@ -3,6 +3,7 @@ package jogo.Grafico;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
@@ -20,11 +21,12 @@ public class Veiculo{
 	protected Timer timerAnimacao;
 	protected Timer timerExplosao;
 	
-	protected Image imagem;
-	protected Image imagemExplosao;
-	protected Image imagemStatusVida;
-	protected Image imagemStatusPoder;
-	protected Image imagemStatusNitro;
+	protected BufferedImage imagem;
+	protected BufferedImage imagemExplosao;
+	protected BufferedImage imagemStatusVida;
+	protected BufferedImage imagemStatusPoder;
+	protected BufferedImage imagemStatusNitro;
+	protected CarregadorImagens carregadorImagens = new CarregadorImagens();
 	protected String direction;
 	
 	
@@ -36,49 +38,27 @@ public class Veiculo{
 	protected KeyHandler keyH;
 	
 	
-	public Image getImagemStatusPoder() {
+	public BufferedImage getImagemStatusPoder() {
 		return imagemStatusPoder;
 	}
 
-	public Image getImagemStatusNitro() {
+	public BufferedImage getImagemStatusNitro() {
 		return imagemStatusNitro;
 	}
 
 	public void setStatusNitro(String statusNitro) {
 		this.statusNitro = statusNitro;
-		if(statusNitro == "ON") {
-			ImageIcon referencia = new ImageIcon("res\\NitroON.png");
-		    imagemStatusNitro = referencia.getImage();
-		} else {
-			ImageIcon referencia = new ImageIcon("res\\NitroOFF.png");
-		    imagemStatusNitro = referencia.getImage();
-		}
-		
+		imagemStatusNitro = carregadorImagens.getImagem(statusNitro);	
 	}
 
 	public void setStatusPoder(String statusPoder) {
 		this.statusPoder = statusPoder;
-		if(statusPoder == "ON") {
-			ImageIcon referencia = new ImageIcon("res\\PoderON.png");
-		    imagemStatusPoder = referencia.getImage();
-		} else {
-			ImageIcon referencia = new ImageIcon("res\\PoderOFF.png");
-		    imagemStatusPoder = referencia.getImage();
-		}
+		imagemStatusPoder = carregadorImagens.getImagem(statusPoder);
 	}
 
 	public void setStatusVida (String statusVida) {
 		this.statusVida = statusVida;
-		if(statusVida == "3 Vidas") {
-		    ImageIcon referencia = new ImageIcon("res\\3Vidas.png");
-		    imagemStatusVida = referencia.getImage();
-		} else if(statusVida == "2 Vidas") {
-			ImageIcon referencia = new ImageIcon("res\\2Vidas.png");
-			imagemStatusVida = referencia.getImage();
-		} else {
-			ImageIcon referencia = new ImageIcon("res\\1Vida.png");
-			imagemStatusVida = referencia.getImage();
-		}
+		imagemStatusVida = carregadorImagens.getImagem(statusVida);
 	}
 	
 	public String getStatusVida() {
@@ -87,7 +67,7 @@ public class Veiculo{
 
 
 
-	public Image getImagemStatusVida () {
+	public BufferedImage getImagemStatusVida () {
 		return this.imagemStatusVida;
 	}
 	

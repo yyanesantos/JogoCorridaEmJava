@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,7 +17,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-public class Corrida extends JPanel implements Runnable, ActionListener{
+
+public class Corrida extends JPanel implements Runnable{
 	
 	//Configurações da tela
 		final int originalTileSize = 16;
@@ -29,16 +32,29 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 		
 		int FPS = 60;
 		
+		public final int maxWorldCol = 30;
+		public final int worldWidth = tileSize * maxWorldCol;
+		public int desvioDeNivelPlayer1 = 0;
+		public int desvioDeNivelPlayer2 = 0;
+		public int bordaDireita = (int) (0.5 * screenWidth);
+		public  int lvlTileWide;
+		public  int maxTilesOffSet; 
+		//public  int maxDesvioDeNivel; 
+		
 		private KeyHandler keyHPlayer1 = new KeyHandler("Player 1");
 		private KeyHandler keyHPlayer2 = new KeyHandler("Player 2");
+		private CarregadorImagens carregadorImagens;
 		Thread gameThread;
 		
-		private Image fundoCorrida;
+		private BufferedImage fundoCorrida;
+		private BufferedImage fundoCorridaPlayer2;
 		private Player player1;
 		private Player player2;
 		private ArrayList<Buraco> buracos;
 		private ArrayList<Vantagem> vantagens;
 		private boolean emJogo;
+		
+
 		//private Player2 player2;
 		
 		
@@ -49,12 +65,16 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 		this.setSize(360, 1440);
 		this.setDoubleBuffered(true);
 		this.setFocusable(true);
+		carregadorImagens = new CarregadorImagens();
 		addKeyListener(keyHPlayer1);
 		addKeyListener(keyHPlayer2);
+
+		fundoCorrida = carregadorImagens.getImagem("FundoCorrida");
 		
-		ImageIcon pistaDeCorrida = new ImageIcon("res\\FundoCorrida.png");
+		lvlTileWide = fundoCorrida.getWidth();
+		maxTilesOffSet = lvlTileWide - screenWidth;
+		//maxDesvioDeNivel = maxTilesOffSet * tileSize;
 		
-		fundoCorrida = pistaDeCorrida.getImage();
 		
 		player1 = new Player(playerSelecionado, this, keyHPlayer1);
 		player1.setY(110);
@@ -72,11 +92,17 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 		this.setSize(360, 1440);
 		this.setDoubleBuffered(true);
 		this.setFocusable(true);
+		carregadorImagens = new CarregadorImagens();
 		addKeyListener(keyHPlayer1);
 		addKeyListener(keyHPlayer2);
+	
+		fundoCorrida = carregadorImagens.getImagem("FundoCorrida");
+		fundoCorridaPlayer2 = carregadorImagens.getImagem("FundoCorrida");
 		
-		ImageIcon pistaDeCorrida = new ImageIcon("res\\FundoCorrida.png");
-		fundoCorrida = pistaDeCorrida.getImage();
+		lvlTileWide = fundoCorrida.getWidth();
+		maxTilesOffSet = lvlTileWide - screenWidth;
+		//maxDesvioDeNivel = maxTilesOffSet * tileSize;
+		
 		player1 = new Player(player1Selecionado, this, keyHPlayer1);
 		player1.setY(110);
 		player1.setxVida(0);
@@ -114,21 +140,39 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 		
 		if(formaPlayer1.intersects(formaPistaAcima) && player1.getMonitor().getTimerInvencibilidadeStatus() == "OFF") {
 			player1.getMonitor().startTimerInvencibilidade();
-			if(player1.getStatusVida() == "3 Vidas") {
+			if(player1.getStatusVida() == "3Vidas") {
 				player1.piscar();
 				player1.setY(player1.getY() +20);
-				player1.setStatusVida("2 Vidas");
-			} else if(player1.getStatusVida() == "2 Vidas") {
+				player1.setStatusVida("2Vidas");
+			} else if(player1.getStatusVida() == "2Vidas") {
 				player1.piscar();
 				player1.setY(player1.getY() +20);
-				player1.setStatusVida("1 Vida");
+				player1.setStatusVida("1Vida");
 			} else {
 				player1.explodir();
-				player1.setStatusVida("3 Vidas");
+				player1.setStatusVida("3Vidas");
 			} 
 			
-		} if(formaPlayer1.intersects(formaPistaAcima)) {
-			player1.derrapar();
+		} else if(formaPlayer1.intersects(formaPistaAcima)) {
+			player1.derrapar("Pra baixo");
+		}
+		
+		if(formaPlayer1.intersects(formaPistaAbaixo) && player1.getMonitor().getTimerInvencibilidadeStatus() == "OFF") {
+			player1.getMonitor().startTimerInvencibilidade();
+			if(player1.getStatusVida() == "3Vidas") {
+				player1.piscar();
+				player1.setY(player1.getY() -20);
+				player1.setStatusVida("2Vidas");
+			} else if(player1.getStatusVida() == "2Vidas") {
+				player1.piscar();
+				player1.setY(player1.getY() -20);
+				player1.setStatusVida("1Vida");
+			} else {
+				player1.explodir();
+				player1.setStatusVida("3Vidas");
+			} 
+		} else if(formaPlayer1.intersects(formaPistaAbaixo)) {
+			player1.derrapar("Pra cima");
 		}
 		
 		for(int i = 0; i < buracos.size(); i++) {
@@ -136,28 +180,28 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 			formaBuracos = buracoTemp.getBounds();
 			if(formaPlayer1.intersects(formaBuracos) && player1.getMonitor().getTimerInvencibilidadeStatus() == "OFF") {
 				player1.getMonitor().startTimerInvencibilidade();
-				if(player1.getStatusVida() == "3 Vidas") {
+				if(player1.getStatusVida() == "3Vidas") {
 					player1.piscar();
-					player1.setStatusVida("2 Vidas");
-				} else if(player1.getStatusVida() == "2 Vidas") {
+					player1.setStatusVida("2Vidas");
+				} else if(player1.getStatusVida() == "2Vidas") {
 					player1.piscar();
-					player1.setStatusVida("1 Vida");
+					player1.setStatusVida("1Vida");
 				} else {
 					player1.explodir();
-					player1.setStatusVida("3 Vidas");
+					player1.setStatusVida("3Vidas");
 				}
 			} else if (player2 != null) {
 				if(player2.getBounds().intersects(formaBuracos) && player2.getMonitor().getTimerInvencibilidadeStatus() == "OFF") {
 					player2.getMonitor().startTimerInvencibilidade();
-					if(player2.getStatusVida() == "3 Vidas") {
+					if(player2.getStatusVida() == "3Vidas") {
 						player2.piscar();
-						player2.setStatusVida("2 Vidas");
-					} else if(player2.getStatusVida() == "2 Vidas") {
+						player2.setStatusVida("2Vidas");
+					} else if(player2.getStatusVida() == "2Vidas") {
 						player2.piscar();
-						player2.setStatusVida("1 Vida");
+						player2.setStatusVida("1Vida");
 					} else {
 						player2.explodir();
-						player2.setStatusVida("3 Vidas");
+						player2.setStatusVida("3Vidas");
 					}
 				}
 			}
@@ -171,20 +215,20 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 				vantagemTemp.setVisivel(false);
 				if(vantagemTemp.getTipoVantagem() == "Nitro") {
 				    player1.setNitro(true);
-				    player1.setStatusNitro("ON");
+				    player1.setStatusNitro("NitroON");
 				} else if(vantagemTemp.getTipoVantagem() == "Poder") {
 					player1.setPoder(true);
-					player1.setStatusPoder("ON");
+					player1.setStatusPoder("PoderON");
 				}
 			} else if( player2 != null) {
 				if(player2.getBounds().intersects(formaVantagens) && player2.isNitro() == false && player2.isPoder() == false) {
 					vantagemTemp.setVisivel(false);
 					if(vantagemTemp.getTipoVantagem() == "Nitro") {
 					    player2.setNitro(true);
-					    player2.setStatusNitro("ON");
+					    player2.setStatusNitro("NitroON");
 					} else if(vantagemTemp.getTipoVantagem() == "Poder") {
 						player2.setPoder(true);
-						player2.setStatusPoder("ON");
+						player2.setStatusPoder("PoderON");
 					}
 				}
 				
@@ -328,6 +372,23 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 			}
 		
 		
+	}
+	
+	public void checkCloseToBorder() {
+		int X1 = (int) player1.getX();
+		int X2 = (int) player2.getX();
+		int diff = X1 - desvioDeNivelPlayer1;
+		int diff2 = X2 - desvioDeNivelPlayer2;
+		if(desvioDeNivelPlayer1 <= 658) {
+			if(diff > bordaDireita) {
+				desvioDeNivelPlayer1 += diff - bordaDireita;
+			}else if(diff2 > bordaDireita) {
+				desvioDeNivelPlayer1 += diff2 - bordaDireita;
+			}
+			else if(desvioDeNivelPlayer1 < 0) {
+				desvioDeNivelPlayer1 = 0;
+			}
+		}
 	}
 	
 	public void setarBuracos () {
@@ -491,6 +552,7 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 	public void update() {
 		player1.update(vantagens);
 		player2.update(vantagens);
+		checkCloseToBorder();
 	}
 	
     public void paintComponent(Graphics g) {
@@ -498,8 +560,8 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 		if(emJogo == true) {
 			super.paintComponent(g);
 			Graphics2D g2 = (Graphics2D) g;
-			g2.drawImage(fundoCorrida, 0, 0, null);
-			player1.draw(g2);
+			g2.drawImage(fundoCorrida, -desvioDeNivelPlayer1, 0, null);
+			player1.draw(g2, desvioDeNivelPlayer1);
 			
 			List<Poder> poderesFrentePlayer1 = player1.getPoderesPraFrente();
 			for(int i = 0; i < poderesFrentePlayer1.size(); i++) {
@@ -514,7 +576,7 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 			    g2.drawImage(p.getImagemPoder(), p.getX(), p.getY(), this.tileSize, this.tileSize, this);
 			}
 			if(player2 != null ) {
-				player2.draw(g2);
+				player2.draw(g2, desvioDeNivelPlayer2);
 				List<Poder> poderesFrentePlayer2 = player2.getPoderesPraFrente();
 				for(int i = 0; i < poderesFrentePlayer2.size(); i++) {
 				    Poder p = poderesFrentePlayer2.get(i);
@@ -532,23 +594,20 @@ public class Corrida extends JPanel implements Runnable, ActionListener{
 			for(int u = 0; u < buracos.size(); u++ ) {
 				Buraco b = buracos.get(u);
 				b.load();
-				g2.drawImage(b.getImagemBuraco(), b.getX(), b.getY(), b.getLargura(), b.getAltura(), this);
+				g2.drawImage(b.getImagemBuraco(), b.getX() - desvioDeNivelPlayer1, b.getY(), b.getLargura(), b.getAltura(), this);
 			}
 			
 			for(int a = 0; a < vantagens.size(); a++ ) {
 				Vantagem v = vantagens.get(a);
 				v.load();
-				g2.drawImage(v.getImagemVantagem(), v.getX(), v.getY(), this.tileSize - 13, this.tileSize - 13, this);
+				g2.drawImage(v.getImagemVantagem(), v.getX() - desvioDeNivelPlayer1, v.getY(), this.tileSize - 13, this.tileSize - 13, this);
 			}
+			
+			
 			g2.dispose();
 		} else {
 			irParaPodio();
 		}
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		
-	}
 }
