@@ -12,7 +12,7 @@ public class CarregadorImagens {
 
 	public BufferedImage getImagem(String qualImagem) {
 		    try {
-		    	imagem = ImageIO.read(new File("res/" + qualImagem + ".png"));
+		    	imagem = ImageIO.read(new File("Jogo/res/" + qualImagem + ".png"));
 		    } catch (IOException ex) {
 		        ex.printStackTrace();
 		    }
