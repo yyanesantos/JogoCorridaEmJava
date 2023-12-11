@@ -28,8 +28,8 @@ public class Buraco {
 		
 		this.imagemBuraco = carregadorImagens.getImagem("Buraco");
 		
-		this.altura = imagemBuraco.getHeight(null);
-		this.largura = imagemBuraco.getWidth(null);
+		this.altura = imagemBuraco.getHeight(null) + 20;
+		this.largura = imagemBuraco.getWidth(null) + 20;
 		
 		
 	}
@@ -79,6 +79,10 @@ public class Buraco {
 
 	public int getY() {
 		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 
 	public BufferedImage getImagemBuraco() {

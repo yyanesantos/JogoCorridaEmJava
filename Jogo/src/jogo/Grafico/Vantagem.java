@@ -28,8 +28,8 @@ public class Vantagem {
 		
 		this.imagemVantagem = carregadorImagens.getImagem("Vantagem");
 		
-		this.altura = 33;
-		this.largura = 33;
+		this.altura = 40;
+		this.largura = 40;
 		
 		
 	}
@@ -77,9 +77,23 @@ public class Vantagem {
 		return y;
 	}
 
+	public void setY(int y) {
+		this.y = y;
+	}
+
 	public BufferedImage getImagemVantagem() {
 		return imagemVantagem;
 	}
+
+	public int getLargura() {
+		return largura;
+	}
+
+	public int getAltura() {
+		return altura;
+	}
+	
+	
 	
 	
     

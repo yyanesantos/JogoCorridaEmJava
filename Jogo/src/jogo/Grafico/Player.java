@@ -29,8 +29,14 @@ public class Player extends Veiculo implements ActionListener{
 	private List <Poder> poderesPraFrente;
 	private List <Poder> poderesPraTras;
 
-	private MonitorTempo monitor;
-	private String deus;
+	private MonitorTempo monitorInvencibilidade;
+	private MonitorTempo monitorNitro;
+	private MonitorTempo monitorPoder;
+	
+	
+	
+	
+	private String nomePersonagem;
 	private int repAnimacaoBatida;
 	private int repAnimacaoExplosao;
 	
@@ -46,14 +52,16 @@ public class Player extends Veiculo implements ActionListener{
 		
 		this.corrida = corrida;		
 		this.keyH = keyH;
-		this.deus = personagemSelecionado;	
-		monitor = new MonitorTempo(keyH);
+		this.nomePersonagem = personagemSelecionado;	
+		monitorInvencibilidade = new MonitorTempo(keyH, 1500);
+		monitorNitro = new MonitorTempo(keyH, 2000);
+		monitorPoder = new MonitorTempo(keyH, 1000);
 		setStatusVida("3Vidas");
 		setStatusPoder("PoderOFF");
 		setStatusNitro("NitroOFF");
 		
-		timerExplosao = new Timer(150, this);
-		timerAnimacao = new Timer(150, this);
+		timerExplosao = new Timer(115, this);
+		timerAnimacao = new Timer(115, this);
 		
 		
 		load();
@@ -66,25 +74,24 @@ public class Player extends Veiculo implements ActionListener{
 	public void setDefaultValues() {
 		
 		this.speed = 0;
-		this.aceleracao = 0.3;
+		this.aceleracao = 0.8;
 		this.MinSpeed = 0;
-		this.MaxSpeed = 8;
+		this.MaxSpeed = 10;
 		this.direction = "direita";
 	}
 	
     public void load(){
     	
-    	
-    	altura = corrida.tileSize - 8;
-		largura = corrida.tileSize - 8;
-    	
-    	if(this.deus == "Zeus") {
+    	if(this.nomePersonagem == "Zeus") {
 			imagem = carregadorImagens.getImagem("CarroZeus");
-		} else if(this.deus == "Poseidon") {
+		} else if(this.nomePersonagem == "Poseidon") {
 			imagem = carregadorImagens.getImagem("CarroPoseidon");
 		} else {
 			imagem = carregadorImagens.getImagem("CarroHades");
 		}
+    	
+    	altura = 60;
+		largura = 70;
 	}
 	
 	public void update (ArrayList<Vantagem> vantagens) {
@@ -99,36 +106,66 @@ public class Player extends Veiculo implements ActionListener{
 	}
 	
 	public Rectangle getBounds() {
-		return new Rectangle(x, y + 20, largura, altura - 20);
+		return new Rectangle(x, y + 20, largura, altura/2);
 	}
 
 	public void vantagens(ArrayList<Vantagem> vantagens) {
-
-		   if(keyH.space1Pressed == true && isPoder == true) {
-			   monitor.startTimerPoder();
-		       this.poderesPraFrente.add(new Poder(x + largura, y + (altura/2) - 16));
-		       this.poderesPraTras.add(new Poder(x - 82, y + (altura/2) - 16));
-		   } else if(keyH.space1Pressed == true && isPoder == false && isNitro == false) {
+		
+		if(explodiu == true) {
+			monitorNitro.setContagemFinalizada(false);
+			monitorPoder.setContagemFinalizada(false);
+		}
+		
+		if(monitorNitro.isContagemFinalizada() == false && monitorPoder.isContagemFinalizada() == false && monitorInvencibilidade.getTimerStatus() == "OFF") {
+			if(explodiu == false) {
+				if(isNitro == true && keyH.space1Pressed == true) {
+					nitro();
+					monitorNitro.startTimer();
+				} else if(isPoder == true && keyH.space1Pressed == true) {
+					monitorPoder.startTimer();
+				    this.poderesPraFrente.add(new Poder(x + largura, y + (altura/2) - 16));
+				    this.poderesPraTras.add(new Poder(x - largura, y + (altura/2) - 16));
+				}
+			}
+		}
+		/*if(monitor.isContagemFinalizada() == false && isNitro == true && explodiu == false && monitor.getTimer() == "OFF") {
+			if(keyH.space1Pressed == true && isNitro == true) {
+				nitro();
+				monitor.startTimerNitro();
+			   } 
+		   } else if(monitor.isContagemFinalizada() == false && isPoder == true && explodiu == false && monitorInvencibilidade.getTimerStatus() == "OFF") {
+			if(keyH.space1Pressed == true && isPoder == true) {
+				   monitor.startTimerPoder();
+			       this.poderesPraFrente.add(new Poder(x + largura, y + (altura/2) - 16));
+			       this.poderesPraTras.add(new Poder(x - largura, y + (altura/2) - 16));
+			   }*/
+		   if(keyH.space1Pressed == true && isPoder == false && isNitro == false) {
 			   keyH.space1Pressed = false;
-		   } else if(keyH.space1Pressed == true && isNitro == true) {
-			   nitro();
-			   monitor.startTimerNitro();
-		   } 
-	        if(monitor.isContagemFinalizada() == true) {
+		   } else if(keyH.space1Pressed == true && isPoder == false && isNitro == false && monitorInvencibilidade.getTimerStatus() == "ON") {
+			   keyH.space1Pressed = false;
+		   }
+
+	        if(monitorNitro.isContagemFinalizada() == true) {
+	           monitorNitro.setContagemFinalizada(false);
 	    	   keyH.space1Pressed = false;
-	    	   isNitro = false;
 	    	   load();
 	    	   setStatusNitro("NitroOFF");
-	    	   monitor.setContagemFinalizada(false);
+	    	   isNitro = false;
+	    	   
+	       } else if(monitorPoder.isContagemFinalizada() == true) {
+	    	   monitorPoder.setContagemFinalizada(false);
+	    	   keyH.space1Pressed = false;
+	    	   setStatusPoder("PoderOFF");
+	    	   isPoder = false;
 	       }
 	    
 	}
 	
 	public void nitro() {
-		speed += 0.2;
-		if(this.deus == "Zeus") {
+		speed += 3;
+		if(this.nomePersonagem == "Zeus") {
 			imagem = carregadorImagens.getImagem("CarroZeusNitro");
-		} else if(this.deus == "Poseidon") {
+		} else if(this.nomePersonagem == "Poseidon") {
 			imagem = carregadorImagens.getImagem("CarroPoseidonNitro");
 		} else {
 			imagem = carregadorImagens.getImagem("CarroHadesNitro");
@@ -140,7 +177,7 @@ public class Player extends Veiculo implements ActionListener{
 			isVisivel = false;
 			repAnimacaoBatida++;
 			timerAnimacao.start();
-		} else if(this.isVisivel() == false && repAnimacaoBatida < 12d) {
+		} else if(this.isVisivel() == false && repAnimacaoBatida < 12) {
 			this.setVisivel(true);
 			repAnimacaoBatida++;
 			this.timerAnimacao.start();
@@ -165,7 +202,7 @@ public class Player extends Veiculo implements ActionListener{
 		} else {
 			repAnimacaoExplosao = 0;
 			load();
-			setY(140);
+			setY(180);
 			explodiu = false;
 		}
 	}
@@ -186,11 +223,19 @@ public class Player extends Veiculo implements ActionListener{
 	public void draw(Graphics2D g2, int desvioDeNivel) {
 		if(this.isVisivel() == true) {
 	    g2.drawImage(imagem, x - desvioDeNivel, y, largura, altura, null);
-	    //g2.drawImage(image, (int)X1 - desvioDeNivel, (int)Y1, Painel.tileSize, Painel.tileSize, null);
 		}
-	    g2.drawImage(getImagemStatusVida(), xVida, 260, null); 
-	    g2.drawImage(getImagemStatusNitro(), xNitro, 286, null); 
-	    g2.drawImage(getImagemStatusPoder(), xPoder, 303, null); 
+	    g2.drawImage(getImagemStatusVida(), xVida, 260 + 45 , null); 
+	    g2.drawImage(getImagemStatusNitro(), xNitro, 286 + 45 , null); 
+	    g2.drawImage(getImagemStatusPoder(), xPoder, 303 + 45 , null); 
+		
+	}
+	
+	public void draw(Graphics2D g2, int desvioDeNivel, String qualPlayer) {
+		if(this.isVisivel() == true && qualPlayer == "1-Player") {
+	    g2.drawImage(imagem, x - desvioDeNivel, 375 + y, largura, altura, null);
+		} else {
+			g2.drawImage(imagem, x - desvioDeNivel, 375 + y, largura, altura, null);
+		}
 		
 	}
 	
@@ -213,6 +258,8 @@ public class Player extends Veiculo implements ActionListener{
 	public boolean isPoder() {
 		return isPoder;
 	}
+	
+	
 
 	public void setVisivel(boolean isVisivel) {
 		this.isVisivel = isVisivel;
@@ -229,9 +276,10 @@ public class Player extends Veiculo implements ActionListener{
 	public void setY(int y) {
 		this.y = y;
 	}
-	
-	
 
+	public String getNomePersonagem() {
+		return nomePersonagem;
+	}
 
 	public int getX() {
 		return this.x;
@@ -245,8 +293,16 @@ public class Player extends Veiculo implements ActionListener{
 		return this.imagem;
 	}
 	
-	public MonitorTempo getMonitor() {
-		return monitor;
+	public MonitorTempo getMonitorInvencibilidade() {
+		return monitorInvencibilidade;
+	}
+
+	public MonitorTempo getMonitorNitro() {
+		return monitorNitro;
+	}
+
+	public MonitorTempo getMonitorPoder() {
+		return monitorPoder;
 	}
 
 	public void setImagem(BufferedImage imagem) {

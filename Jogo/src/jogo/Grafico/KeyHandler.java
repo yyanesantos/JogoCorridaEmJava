@@ -17,6 +17,11 @@ public class KeyHandler implements KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
+		//PARA O MENU
+		
+		
+		//PARA O JOGO
 		int code = e.getKeyCode();
 		if(player == "Player 1") {
 		if (code == KeyEvent.VK_W) {

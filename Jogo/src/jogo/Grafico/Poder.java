@@ -14,25 +14,25 @@ public class Poder {
 	private int x, y;
 	private int largura, altura;
 	private boolean isVisivel;
-	private String nomePersonagem;
 	private CarregadorImagens carregadorImagens;
 	
-	private static final int LARGURA = 1440;
+	private static final int LARGURA = 2880;
 	private static final int LARGURAINICIAL = 0;
-	private static int VELOCIDADE = 2;
+	private static int VELOCIDADE = 15;
 	
 	public Poder(int x, int y) {
 		
 		this.x = x;
 		this.y = y;
+		carregadorImagens = new CarregadorImagens();
 		this.isVisivel = true;
 	}
 	
-	public void load() {
+	public void load(String nomePersonagem) {
 		
-		if(this.nomePersonagem == "Zeus") {
+		if(nomePersonagem == "Zeus") {
 			imagemPoder = carregadorImagens.getImagem("PoderZeus");
-		} else if (this.nomePersonagem == "Hades") {
+		} else if (nomePersonagem == "Hades") {
 			imagemPoder = carregadorImagens.getImagem("PoderHades");
 		} else {
 			imagemPoder = carregadorImagens.getImagem("PoderPoseidon");

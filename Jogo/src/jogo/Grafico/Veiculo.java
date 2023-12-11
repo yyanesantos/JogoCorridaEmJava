@@ -106,10 +106,10 @@ public class Veiculo{
 	public void virar () {
 		if(this.speed != 0) {
 			if(keyH.up1Pressed == true) {
-				this.y -= 2;
+				this.y -= 4;
 			}
 			else if(keyH.down1Pressed == true) {
-				this.y += 2;
+				this.y += 4;
 			}
 		}
 	}
@@ -134,22 +134,4 @@ public class Veiculo{
 		this.isVisivel = isVisivel;
 	}
 
-	public void encherNitro () {
-		
-	}
-	
-	public void turbinar () {
-		
-	}
-	
-    
-	
-	public void diminuirVida () {
-		
-	}
-	
-	public void encherVida () {
-		
-	}
-	
 }
