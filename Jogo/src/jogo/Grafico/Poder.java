@@ -3,10 +3,7 @@ package jogo.Grafico;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageFilter;
-import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 
 public class Poder {
 	

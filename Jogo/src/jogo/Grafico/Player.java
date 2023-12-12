@@ -1,29 +1,21 @@
 package jogo.Grafico;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.Timer;
 
-import jogo.Jogo;
 
 
 public class Player extends Veiculo implements ActionListener{
 	private static final Graphics2D g2 = null;
 
 	Corrida corrida;
-	
-	private Personagem personagem;
 	
 	private int altura, largura;
 	private List <Poder> poderesPraFrente;
@@ -32,6 +24,7 @@ public class Player extends Veiculo implements ActionListener{
 	private MonitorTempo monitorInvencibilidade;
 	private MonitorTempo monitorNitro;
 	private MonitorTempo monitorPoder;
+	private MonitorTempo monitorVoltaCompleta;
 	
 	
 	
@@ -45,20 +38,24 @@ public class Player extends Veiculo implements ActionListener{
 	
 	
 	
-	public Player (String personagemSelecionado, Corrida corrida, KeyHandler keyH) {
+	public Player (String personagemSelecionado, Corrida corrida, KeyHandler keyH, String qualPlayer) {
 		imagemExplosao = carregadorImagens.getImagem("Explosao");
+		setImagemPlayer(qualPlayer);
 		
 		isVisivel = true;
 		
+		numeroVoltas = 1;
 		this.corrida = corrida;		
 		this.keyH = keyH;
 		this.nomePersonagem = personagemSelecionado;	
 		monitorInvencibilidade = new MonitorTempo(keyH, 1500);
 		monitorNitro = new MonitorTempo(keyH, 2000);
 		monitorPoder = new MonitorTempo(keyH, 1000);
+		monitorVoltaCompleta = new MonitorTempo(keyH, 1000);
 		setStatusVida("3Vidas");
 		setStatusPoder("PoderOFF");
 		setStatusNitro("NitroOFF");
+		setStatusVoltas("Volta1");
 		
 		timerExplosao = new Timer(115, this);
 		timerAnimacao = new Timer(115, this);
@@ -77,7 +74,6 @@ public class Player extends Veiculo implements ActionListener{
 		this.aceleracao = 0.8;
 		this.MinSpeed = 0;
 		this.MaxSpeed = 10;
-		this.direction = "direita";
 	}
 	
     public void load(){
@@ -102,6 +98,9 @@ public class Player extends Veiculo implements ActionListener{
 		if(explodiu == false) {
 		this.virar();
 		}
+		if(this.x > 2845) {
+			x = 0;
+		}
 		vantagens(vantagens);
 	}
 	
@@ -112,6 +111,7 @@ public class Player extends Veiculo implements ActionListener{
 	public void vantagens(ArrayList<Vantagem> vantagens) {
 		
 		if(explodiu == true) {
+			load();
 			monitorNitro.setContagemFinalizada(false);
 			monitorPoder.setContagemFinalizada(false);
 		}
@@ -128,17 +128,6 @@ public class Player extends Veiculo implements ActionListener{
 				}
 			}
 		}
-		/*if(monitor.isContagemFinalizada() == false && isNitro == true && explodiu == false && monitor.getTimer() == "OFF") {
-			if(keyH.space1Pressed == true && isNitro == true) {
-				nitro();
-				monitor.startTimerNitro();
-			   } 
-		   } else if(monitor.isContagemFinalizada() == false && isPoder == true && explodiu == false && monitorInvencibilidade.getTimerStatus() == "OFF") {
-			if(keyH.space1Pressed == true && isPoder == true) {
-				   monitor.startTimerPoder();
-			       this.poderesPraFrente.add(new Poder(x + largura, y + (altura/2) - 16));
-			       this.poderesPraTras.add(new Poder(x - largura, y + (altura/2) - 16));
-			   }*/
 		   if(keyH.space1Pressed == true && isPoder == false && isNitro == false) {
 			   keyH.space1Pressed = false;
 		   } else if(keyH.space1Pressed == true && isPoder == false && isNitro == false && monitorInvencibilidade.getTimerStatus() == "ON") {
@@ -202,7 +191,7 @@ public class Player extends Veiculo implements ActionListener{
 		} else {
 			repAnimacaoExplosao = 0;
 			load();
-			setY(180);
+			setY(130);
 			explodiu = false;
 		}
 	}
@@ -219,15 +208,33 @@ public class Player extends Veiculo implements ActionListener{
 		}
 	}
 	
+	public void checarVoltas(int x) {
+		if(x >= 2835 && monitorVoltaCompleta.getTimerStatus() == "OFF") {
+			this.numeroVoltas ++;
+			monitorVoltaCompleta.startTimer();
+		}
+		
+		if(numeroVoltas == 2) {
+			setStatusVoltas("Volta2");
+		} else if(numeroVoltas == 3) {
+			setStatusVoltas("Volta3");
+		} else if(numeroVoltas == 4) {
+			setStatusVoltas("Volta4");
+		} else if(numeroVoltas == 5) {
+			setStatusVoltas("Volta5");
+		}
+		
+	}
 	
 	public void draw(Graphics2D g2, int desvioDeNivel) {
 		if(this.isVisivel() == true) {
 	    g2.drawImage(imagem, x - desvioDeNivel, y, largura, altura, null);
 		}
-	    g2.drawImage(getImagemStatusVida(), xVida, 260 + 45 , null); 
-	    g2.drawImage(getImagemStatusNitro(), xNitro, 286 + 45 , null); 
-	    g2.drawImage(getImagemStatusPoder(), xPoder, 303 + 45 , null); 
-		
+	    g2.drawImage(getImagemStatusVida(), xVida, 260 + 43 , null); 
+	    g2.drawImage(getImagemStatusNitro(), xNitro, 286 + 43 , null); 
+	    g2.drawImage(getImagemStatusPoder(), xPoder, 303 + 43 , null); 
+	    g2.drawImage(getImagemStatusVoltas(), xVolta, 300 + 43, null);
+	    g2.drawImage(getImagemPlayer(), xPlayer, 270+45, null);
 	}
 	
 	public void draw(Graphics2D g2, int desvioDeNivel, String qualPlayer) {

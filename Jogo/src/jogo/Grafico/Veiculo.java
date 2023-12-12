@@ -1,17 +1,14 @@
 package jogo.Grafico;
 
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
 import javax.swing.Timer;
+
 public class Veiculo{
 	
 	
 	protected int x, y;
-	protected int xVida, xNitro, xPoder;
+	protected int xVida, xNitro, xPoder, xVolta, xPlayer;
 	protected double speed;
 	protected double aceleracao;
 	protected int MaxSpeed;
@@ -26,13 +23,18 @@ public class Veiculo{
 	protected BufferedImage imagemStatusVida;
 	protected BufferedImage imagemStatusPoder;
 	protected BufferedImage imagemStatusNitro;
+	protected BufferedImage imagemStatusVoltas;
+	protected BufferedImage imagemPlayer;
+	
+	
 	protected CarregadorImagens carregadorImagens = new CarregadorImagens();
-	protected String direction;
+	protected int numeroVoltas;
 	
 	
 	protected String statusVida;
 	protected String statusNitro;
 	protected String statusPoder;
+	protected String statusVoltas;
 	
 	protected boolean isVisivel, isNitro, isPoder;
 	protected KeyHandler keyH;
@@ -44,6 +46,18 @@ public class Veiculo{
 
 	public BufferedImage getImagemStatusNitro() {
 		return imagemStatusNitro;
+	}
+
+	public BufferedImage getImagemStatusVoltas() {
+		return imagemStatusVoltas;
+	}
+	
+	public BufferedImage getImagemPlayer() {
+		return imagemPlayer;
+	}
+
+	public void setImagemPlayer(String player) {
+			imagemPlayer = carregadorImagens.getImagem(player);
 	}
 
 	public void setStatusNitro(String statusNitro) {
@@ -65,12 +79,25 @@ public class Veiculo{
 		return statusVida;
 	}
 
+	public String getStatusVoltas() {
+		return statusVoltas;
+	}
 
+	public void setStatusVoltas(String statusVoltas) {
+		this.statusVoltas = statusVoltas;
+		imagemStatusVoltas = carregadorImagens.getImagem(statusVoltas);
+	}
 
 	public BufferedImage getImagemStatusVida () {
 		return this.imagemStatusVida;
 	}
 	
+	
+	
+	public int getNumeroVoltas() {
+		return numeroVoltas;
+	}
+
 	public void acelerar () {
 		if(keyH.right1Pressed == true) {
 			this.speed += this.aceleracao;
@@ -99,10 +126,6 @@ public class Veiculo{
 		}
 	}
 	
-	public void derrapar () {
-		
-	}
-	
 	public void virar () {
 		if(this.speed != 0) {
 			if(keyH.up1Pressed == true) {
@@ -124,6 +147,14 @@ public class Veiculo{
 
 	public void setxPoder(int xPoder) {
 		this.xPoder = xPoder;
+	}
+
+	public void setxVolta(int xVolta) {
+		this.xVolta = xVolta;
+	}
+	
+	public void setxPlayer(int xPlayer) {
+		this.xPlayer = xPlayer;
 	}
 
 	public boolean isVisivel() {

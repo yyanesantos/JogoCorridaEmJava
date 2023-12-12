@@ -22,8 +22,11 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import jogo.Grafico.CarregadorImagens;
+import jogo.Grafico.Personagem;
 
 public class MenuPrincipalDefinitivo extends JPanel implements  ActionListener{
+	
+	//EM PROCESSO DE CONSTRUCAO
 	
 	Graphics g;
 	private CarregadorImagens carregadorImagens;
@@ -40,7 +43,23 @@ public class MenuPrincipalDefinitivo extends JPanel implements  ActionListener{
 	private boolean sairIsVisivel = false;
 	private boolean umaJanelaAberta = false;
 	
+	private boolean janelaNovoJogoJaCriada = false;
+	
+	private MenuNovoJogo menuNovoJogo;
+	
+	private Personagem zeus;
+	private Personagem hades;
+	private Personagem poseidon;
+	
+	private String personagem1Player;
+	private String personagem2Player;
+	
 	public MenuPrincipalDefinitivo() {
+		
+		
+	    zeus = new Personagem("Zeus");
+	    hades = new Personagem("Hades");
+	    poseidon = new Personagem("Poseidon");
 		carregadorImagens = new CarregadorImagens();
 		timer = new Timer(100, this);
 		timerJanelas = new Timer(1000, this);
@@ -61,16 +80,6 @@ public class MenuPrincipalDefinitivo extends JPanel implements  ActionListener{
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 700, 400);
 		desenharTelaInicio(g);
-	}
-	
-	public void paint(Graphics g, String situacaoJogo) {
-		int y = 250;
-		int x = 100;
-		g.setColor(Color.RED);
-		g.fillRect(x, y, 200, 100);
-		g.setFont(g.getFont().deriveFont(Font.BOLD, 20F));
-		String texto = "1-Player";
-		g.drawString(texto, x, y);
 	}
 	
 	public void desenharTelaInicio(Graphics g) {
@@ -127,8 +136,12 @@ public class MenuPrincipalDefinitivo extends JPanel implements  ActionListener{
         });
 		
 		Graphics2D g2 = (Graphics2D) g;
+		
 		g2.drawImage(imagemMenuPrincipal, 0, 0, null);
 		
+		zeus.reacao(g2, "Feliz", 80, 120);
+		hades.reacao(g2, "Feliz", 550, 20);
+		poseidon.reacao(g2, "Feliz", 580, 200);
 		g2.setFont(g2.getFont().deriveFont(Font.BOLD, 30F));
 		g2.setColor(Color.RED);
 		
@@ -186,19 +199,52 @@ public class MenuPrincipalDefinitivo extends JPanel implements  ActionListener{
 		
 	}
 	
+	public String getPersonagem1Player() {
+		return personagem1Player;
+	}
+
+	public void setPersonagem1Player(String personagem1Player) {
+		this.personagem1Player = personagem1Player;
+	}
+
+	public String getPersonagem2Player() {
+		return personagem2Player;
+	}
+
+	public void setPersonagem2Player(String personagem2Player) {
+		this.personagem2Player = personagem2Player;
+	}
+
+	public void setJanelaNovoJogoJaCriada(boolean janelaNovoJogoJaCriada) {
+		this.janelaNovoJogoJaCriada = janelaNovoJogoJaCriada;
+	}
+	
+	public Personagem getZeus() {
+		return zeus;
+	}
+
+	public Personagem getHades() {
+		return hades;
+	}
+
+	public Personagem getPoseidon() {
+		return poseidon;
+	}
+	
+	public void setSituacaoJogo(String situacaoJogo) {
+		this.situacaoJogo = situacaoJogo;
+	}
+
 	public void menuNovoJogo() {
 		situacaoJogo = "Novo Jogo";
-		JFrame janelaNovoJogo = new JFrame("Novo Jogo");
-		janelaNovoJogo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
-		janelaNovoJogo.setSize(800, 500);
-		janelaNovoJogo.setLocationRelativeTo(null);
-		janelaNovoJogo.setResizable(false);
-		janelaNovoJogo.setVisible(true);
-		JPanel painelNovoJogo = new JPanel();
-		painelNovoJogo.setBackground(Color.WHITE);
-		painelNovoJogo.paint(g);
-		janelaNovoJogo.add(painelNovoJogo);
-		
+		if(janelaNovoJogoJaCriada == false) {
+			janelaNovoJogoJaCriada = true;
+			menuNovoJogo = new MenuNovoJogo(this);
+		}
+	}
+
+	public MenuNovoJogo getMenuNovoJogo() {
+		return menuNovoJogo;
 	}
 
 	@Override
@@ -209,6 +255,10 @@ public class MenuPrincipalDefinitivo extends JPanel implements  ActionListener{
 				umaJanelaAberta = false;
 				timerJanelas.stop();
 			}
+		}
+		
+		if(situacaoJogo == "Escolhido") {
+			situacaoJogo = "Iniciado";
 		}
 		
 	}

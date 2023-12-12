@@ -1,6 +1,5 @@
 package jogo.Grafico;
 
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
@@ -45,8 +44,6 @@ public class Buraco {
     	return new Rectangle(x, y, largura, altura);
     }
     
-    
-
 	public boolean isBateu() {
 		return bateu;
 	}
@@ -63,8 +60,6 @@ public class Buraco {
 		this.isVisivel = isVisivel;
 	}
 	
-	
-
 	public int getLargura() {
 		return largura;
 	}

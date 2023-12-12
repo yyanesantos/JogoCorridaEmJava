@@ -4,9 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.Icon;
@@ -19,19 +16,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 public class MenuPrincipal extends JFrame{
 	
-	//private Image vencedor;
-	//private Image perdedor;
-	//private Image podioImagem;
 	private String personagem1Player;
 	private String personagem2Player;
 	public boolean iniciouJogo;
+	private String modoDeJogo;
 	
 	public String getPersonagem1Player() {
 		return personagem1Player;
@@ -45,8 +39,6 @@ public class MenuPrincipal extends JFrame{
 		
 	}
 	
-	
-	
 	public boolean isIniciouJogo() {
 		return iniciouJogo;
 	}
@@ -59,8 +51,6 @@ public class MenuPrincipal extends JFrame{
 		}
 	}
 
-
-
 	public void criarLayoutInicial() {
 		
 		setLayout(new BorderLayout());
@@ -69,7 +59,7 @@ public class MenuPrincipal extends JFrame{
 		panelTitulo.setBackground(Color.red);
 		panelTitulo.setLayout(new FlowLayout());
 		
-		Icon tituloImagem = new ImageIcon("res\\tituloMenu.png");
+		Icon tituloImagem = new ImageIcon("Jogo/res/tituloMenu.png");
 		
 		JLabel titulo = new JLabel(tituloImagem);
 		panelTitulo.add(titulo);
@@ -88,7 +78,9 @@ public class MenuPrincipal extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				String iniciarJogo;
 				iniciarJogo = menuIniciarJogo();
+				modoDeJogo = iniciarJogo;
 				if(iniciarJogo == "1-Player") {
+					
 					menuEscolherPersonagem("1-Player");
 				} else if(iniciarJogo == "2-Player") {
 					menuEscolherPersonagem("2-Player");
@@ -97,8 +89,6 @@ public class MenuPrincipal extends JFrame{
 					return;
 				}
 			}
-			
-			
 		});
 		JButton botaoComoJogar = new JButton("Como Jogar");
 		botaoComoJogar.setFont(new Font("Arial", Font.BOLD, 12));
@@ -119,17 +109,14 @@ public class MenuPrincipal extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
-				//podio("Hades", "Zeus");
 			}
 		
 		});
-		
+
 		panelBotoes.add(botaoIniciarJogo);
 		panelBotoes.add(botaoComoJogar);
 		panelBotoes.add(botaoSair);
 		add(panelBotoes, BorderLayout.SOUTH);
-		
-		
 	}
 	
 	public void menuComoJogar() {
@@ -144,7 +131,7 @@ public class MenuPrincipal extends JFrame{
 		JPanel comoJogar = new JPanel(new BorderLayout());
 		comoJogar.setBackground(Color.white);
 		menuComoJogar.add(comoJogar, BorderLayout.CENTER);
-		JLabel comoJogarImagem = new JLabel (new ImageIcon ("res\\MenuComoJogar.png"));
+		JLabel comoJogarImagem = new JLabel (new ImageIcon ("Jogo/res/MenuComoJogar.png"));
 		comoJogarImagem.setFocusable(true);
 		comoJogarImagem.setDoubleBuffered(true);
 		comoJogar.add(comoJogarImagem, BorderLayout.CENTER);
@@ -229,7 +216,6 @@ public class MenuPrincipal extends JFrame{
 	    }
 	}
 	
-	
 	public void menuPoseidon () {
 		JFrame menuPoseidon = new JFrame("Poseidon");
 		menuPoseidon.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);			
@@ -256,7 +242,7 @@ public class MenuPrincipal extends JFrame{
 		poseidonInfo.setBorder(new EmptyBorder(0,5,0,0));
 		poseidonInfo.setForeground(Color.green);
 		poseidon.add(poseidonInfo, BorderLayout.CENTER);
-		JLabel poseidonPoder = new JLabel(new ImageIcon ("res\\PoderPoseidon.png"));
+		JLabel poseidonPoder = new JLabel(new ImageIcon ("Jogo/res/PoderPoseidon.png"));
 		poseidon.add(poseidonPoder, BorderLayout.SOUTH);
 	}
 	
@@ -287,7 +273,7 @@ public class MenuPrincipal extends JFrame{
 		hadesInfo.setFont(new Font("Arial", Font.BOLD, 14));
 		hadesInfo.setForeground(Color.red);
 		hades.add(hadesInfo, BorderLayout.CENTER);
-		JLabel poderHades = new JLabel (new ImageIcon ("res\\PoderHades.png"));
+		JLabel poderHades = new JLabel (new ImageIcon ("Jogo/res/PoderHades.png"));
 		hades.add(poderHades, BorderLayout.SOUTH);
 		
 	}
@@ -319,15 +305,15 @@ public class MenuPrincipal extends JFrame{
 		zeusInfo.setFont(new Font("Arial", Font.BOLD, 14));
 		zeusInfo.setForeground(Color.blue);
 		zeus.add(zeusInfo, BorderLayout.CENTER);
-		JLabel zeusPoder = new JLabel (new ImageIcon("res\\PoderZeus.png"));
+		JLabel zeusPoder = new JLabel (new ImageIcon("Jogo/res/PoderZeus.png"));
 		zeus.add(zeusPoder, BorderLayout.SOUTH);
-    };
+    }
     
     public void menuEscolherPersonagem(String modoDeJogo) {
     	
-    	Icon carroZeus = new ImageIcon("res\\CarroZeus.png");
-    	Icon carroPoseidon = new ImageIcon("res\\CarroPoseidon.png");
-    	Icon carroHades = new ImageIcon("res\\CarroHades.png");
+    	Icon carroZeus = new ImageIcon("Jogo/res/CarroZeus.png");
+    	Icon carroPoseidon = new ImageIcon("Jogo/res/CarroPoseidon.png");
+    	Icon carroHades = new ImageIcon("Jogo/res/CarroHades.png");
     	
     	
     	JFrame menuEscolherPersonagem = new JFrame("Selecione o personagem para o Player 1!");
@@ -338,7 +324,6 @@ public class MenuPrincipal extends JFrame{
     	menuEscolherPersonagem.setLocationRelativeTo(null);
     	menuEscolherPersonagem.setResizable(true);		
     	menuEscolherPersonagem.toFront();
-    	
     	
     	
     	JPanel titulo = new JPanel();
@@ -359,7 +344,7 @@ public class MenuPrincipal extends JFrame{
     		JLabel imagemPersonagemZeus = new JLabel();
     		zeusPainel.add(imagemPersonagemZeus, BorderLayout.CENTER);
     		imagemPersonagemZeus.setIcon(animacaoDeuses("Zeus", "feliz"));
-            imagemCarroZeus.setIcon((Icon) carroZeus);
+            imagemCarroZeus.setIcon(carroZeus);
             menuEscolherPersonagem.add(zeusPainel, BorderLayout.LINE_START);
         JPanel poseidonPainel = new JPanel(new FlowLayout());
     		JLabel imagemCarroPoseidon = new JLabel();
@@ -369,7 +354,7 @@ public class MenuPrincipal extends JFrame{
     		JLabel imagemPersonagemPoseidon = new JLabel();
     		poseidonPainel.add(imagemPersonagemPoseidon, BorderLayout.CENTER);
     		imagemPersonagemPoseidon.setIcon(animacaoDeuses("Poseidon", "feliz"));
-    		imagemCarroPoseidon.setIcon((Icon)carroPoseidon);
+    		imagemCarroPoseidon.setIcon(carroPoseidon);
             menuEscolherPersonagem.add(poseidonPainel, BorderLayout.CENTER);
         JPanel hadesPainel = new JPanel(new FlowLayout());
     		JLabel imagemCarroHades = new JLabel();
@@ -379,7 +364,7 @@ public class MenuPrincipal extends JFrame{
     		JLabel imagemPersonagemHades = new JLabel();
     		hadesPainel.add(imagemPersonagemHades, BorderLayout.CENTER);
     		imagemPersonagemHades.setIcon(animacaoDeuses("Hades", "feliz"));
-    		imagemCarroHades.setIcon((Icon) carroHades);
+    		imagemCarroHades.setIcon(carroHades);
             menuEscolherPersonagem.add(hadesPainel, BorderLayout.LINE_END);
 
         JPanel botaoEscolha = new JPanel(new FlowLayout());
@@ -499,73 +484,31 @@ public class MenuPrincipal extends JFrame{
         		imagemPersonagemHades.setVisible(false);
         		escolhaHades.setVisible(false);
         	}
-            
-            
-            
-    		
-    		
     }
-    
 	
-	public ImageIcon animacaoDeuses (String deus, String mood) {
+	public String getModoDeJogo() {
+		return modoDeJogo;
+	}
+
+	public String getPersonagem2Player() {
+		return personagem2Player;
+	}
+
+	public Icon animacaoDeuses (String deus, String mood) {
 		
-		ImageIcon zeusParado = new ImageIcon ("res\\Zeus1.png");
-		ImageIcon zeusFeliz = new ImageIcon ("res\\Zeus2.png");
-		ImageIcon zeusTriste = new ImageIcon ("res\\Zeus3.png");
-		ImageIcon hadesParado = new ImageIcon ("res\\Hades1.png");
-		ImageIcon hadesFeliz = new ImageIcon ("res\\Hades2.png");
-		ImageIcon hadesTriste = new ImageIcon ("res\\Hades3.png");
-		ImageIcon poseidonParado = new ImageIcon("res\\Poseidon1.png");
-		ImageIcon poseidonFeliz = new ImageIcon ("res\\Poseidon2.png");
-		ImageIcon poseidonTriste = new ImageIcon ("res\\Poseidon3.png");
-		
+		Icon zeusParado = new ImageIcon ("Jogo/res/ZeusExistindo.png");
+		Icon zeusFeliz = new ImageIcon ("Jogo/res/ZeusFeliz.png");
+		Icon hadesFeliz = new ImageIcon ("Jogo/res/HadesFeliz.png");
+		Icon poseidonFeliz = new ImageIcon ("Jogo/res/PoseidonFeliz.png");
 		
 		if(mood == "feliz" && deus == "Zeus") {
 			return zeusFeliz;
-		} else if (mood == "triste" && deus == "Zeus") {
-			return zeusTriste;
-		} else if(mood == "feliz" && deus == "Hades") {
+		}else if(mood == "feliz" && deus == "Hades") {
 			return hadesFeliz;
-		} else if (mood == "triste" && deus == "Hades") {
-			return hadesTriste;
-		} else if (mood == "feliz" && deus == "Poseidon"){
+		}else if (mood == "feliz" && deus == "Poseidon"){
 			return poseidonFeliz;
-		} else if (mood == "triste" && deus == "Poseidon") {
-			return poseidonTriste;
-		} else {
+		}else {
 			return zeusParado;
 		}
-		
-		
-		
 	}
-	
-	/*public void podio (String primeiroLugar, String segundoLugar) {
-		
-		JFrame podio = new JFrame ("Pódio!");
-		podio.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);			
-		podio.setLayout(new BorderLayout());
-		podio.setSize(500,500);
-		podio.setVisible(true);
-		podio.setLocationRelativeTo(null);
-		podio.toFront();
-		
-		this.vencedor = animacaoDeuses(primeiroLugar, "feliz").getImage();
-		this.perdedor = animacaoDeuses(segundoLugar, "triste").getImage();
-		this.podioImagem = new ImageIcon("res\\Podio.png").getImage();
-		
-		JPanel podioCorrida = new JPanel() {
-			
-			@Override 
-			public void paint(Graphics g){
-				super.paint(g);
-				Graphics2D graficos = (Graphics2D)g;
-				graficos.drawImage(podioImagem, 100, 250, this);
-				graficos.drawImage(vencedor, 281 , 184, this);
-				graficos.drawImage(perdedor, 139, 232, null);   
-			}
-		};
-		podio.add(podioCorrida);
-		podioCorrida.setBackground(Color.white);
-	}*/
 }		
